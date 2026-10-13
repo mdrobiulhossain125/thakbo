@@ -161,8 +161,14 @@ ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public read published hotels" ON public.hotels;
 CREATE POLICY "Public read published hotels" ON public.hotels FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Allow write hotels" ON public.hotels;
+CREATE POLICY "Allow write hotels" ON public.hotels FOR ALL USING (true) WITH CHECK (true);
+
 DROP POLICY IF EXISTS "Public read hotel rooms" ON public.hotel_rooms;
 CREATE POLICY "Public read hotel rooms" ON public.hotel_rooms FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Allow write hotel rooms" ON public.hotel_rooms;
+CREATE POLICY "Allow write hotel rooms" ON public.hotel_rooms FOR ALL USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Public read and write submissions" ON public.submissions;
 CREATE POLICY "Public read and write submissions" ON public.submissions FOR ALL USING (true) WITH CHECK (true);

@@ -50,9 +50,9 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
   const { language, t, formatDate, formatPrice } = useLanguage();
   const { user, isAdmin, isLoading, login, logout, changePassword } = useAuth();
 
-  // Login form state
-  const [emailInput, setEmailInput] = useState('mdrobiulhossain125@gmail.com');
-  const [passwordInput, setPasswordInput] = useState('thakbo2026');
+  // Login form state (always empty by default so credentials remain strictly private)
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -136,8 +136,18 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
     const res = await login(emailInput, passwordInput);
     if (!res.success) {
       setLoginError(res.error || 'Login failed');
+    } else {
+      // Clear inputs completely upon successful authentication
+      setEmailInput('');
+      setPasswordInput('');
     }
     setIsLoggingIn(false);
+  };
+
+  const handleLogout = async () => {
+    setEmailInput('');
+    setPasswordInput('');
+    await logout();
   };
 
   const handleChangePassword = async (e: React.FormEvent) => {
@@ -287,7 +297,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
 
           <div className="pt-2 flex justify-center gap-3">
             <button
-              onClick={logout}
+              onClick={handleLogout}
               className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
             >
               {language === 'bn' ? 'সাইন আউট করুন' : 'Sign Out'}
@@ -329,7 +339,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 {language === 'bn' ? 'অ্যাডমিন ইমেইল' : 'Admin Email'}
@@ -337,9 +347,12 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
               <input
                 type="email"
                 required
+                autoComplete="off"
+                autoCapitalize="none"
+                spellCheck="false"
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
-                placeholder="mdrobiulhossain125@gmail.com"
+                placeholder="admin@thakbo.com"
                 className="w-full text-xs sm:text-sm px-3.5 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 font-mono"
               />
             </div>
@@ -351,6 +364,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
               <input
                 type="password"
                 required
+                autoComplete="new-password"
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
                 placeholder="••••••••"
@@ -409,7 +423,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
           )}
 
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
           >
             <LogOut className="w-3.5 h-3.5" />
