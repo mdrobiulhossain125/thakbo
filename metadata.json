@@ -1,0 +1,6 @@
+{
+  "name": "Thakbo - Budget Accommodation Discovery Platform for Bangladesh",
+  "description": "Community-powered budget accommodation discovery platform helping travelers find affordable stays across divisions, districts, and upazilas in Bangladesh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

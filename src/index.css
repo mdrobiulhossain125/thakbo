@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-bengali: 'Hind Siliguri', sans-serif;
+    --font-english: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-monospace: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-bengali);
+    color: #0F172A;
+    background-color: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-bn {
+  font-family: 'Hind Siliguri', sans-serif !important;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
+}
