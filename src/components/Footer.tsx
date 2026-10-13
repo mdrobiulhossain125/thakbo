@@ -113,15 +113,24 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenSupabaseModal 
                 ? 'পোস্টগ্রেস এসকিউএল স্কিমা ও রো-লেভেল সিকিউরিটি (RLS) সমর্থিত স্থাপত্য।'
                 : 'Built with Supabase PostgreSQL schema, RLS policies, and server authorization.'}
             </p>
-            {onOpenSupabaseModal && (
+            <div className="flex flex-col gap-2 pt-1">
+              {onOpenSupabaseModal && (
+                <button
+                  onClick={onOpenSupabaseModal}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-blue-300 border border-slate-700 transition-colors w-fit"
+                >
+                  <Database className="w-3.5 h-3.5" />
+                  <span>{language === 'bn' ? 'সুপাবেস ডেটাবেস স্কিমা' : 'Supabase SQL & Schema'}</span>
+                </button>
+              )}
               <button
-                onClick={onOpenSupabaseModal}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-blue-300 border border-slate-700 transition-colors"
+                onClick={() => onNavigate('admin')}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors w-fit"
               >
-                <Database className="w-3.5 h-3.5" />
-                <span>{language === 'bn' ? 'ডেটাবেস সেটআপ দেখুন' : 'View DB Architecture'}</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                <span>{language === 'bn' ? 'মডারেটর ও ওনার লগইন' : 'Admin & Moderator Login'}</span>
               </button>
-            )}
+            </div>
           </div>
 
         </div>
@@ -132,11 +141,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenSupabaseModal 
             <span>© 2026 {language === 'bn' ? 'থাকবো' : 'Thakbo'}. {t('allRightsReserved')}</span>
             <button 
               onClick={() => onNavigate('admin')}
-              className="text-slate-600 hover:text-slate-400 transition-colors p-1"
+              className="text-slate-400 hover:text-white transition-colors underline ml-2"
               title="Restricted Staff Entry"
-              aria-label="Staff Login"
             >
-              <ShieldCheck className="w-3.5 h-3.5" />
+              {language === 'bn' ? 'অ্যাডমিন প্যানেল' : 'Admin Console'}
             </button>
           </div>
 

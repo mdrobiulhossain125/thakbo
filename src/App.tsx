@@ -26,6 +26,8 @@ function MainApp() {
       const hash = window.location.hash.replace('#', '') || 'home';
       if (hash.startsWith('hotel/')) {
         // Will be handled if hotel is loaded or falls back to hotels
+      } else if (hash === 'login') {
+        setCurrentView('admin');
       } else if (['home', 'hotels', 'add-hotel', 'status', 'admin', 'about', 'privacy', 'terms', 'listing-policy', 'contact'].includes(hash)) {
         setCurrentView(hash);
       }
