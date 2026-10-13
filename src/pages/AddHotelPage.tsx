@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { AccommodationType, RoomType, BathroomType, ContributorRelationship, SubmissionPayload } from '../types';
-import { DIVISIONS, getDistrictsByDivision, getUpazilasByDistrict } from '../data/locations';
+import { 
+  DIVISIONS, 
+  DISTRICTS, 
+  UPAZILAS, 
+  getDistrictsByDivision, 
+  getUpazilasByDistrict, 
+  getUpazilasByDivision,
+  findDistrictById, 
+  findUpazilaById,
+  POPULAR_TRAVEL_UPAZILAS 
+} from '../data/locations';
 import { ALL_FACILITIES } from '../data/facilities';
 import { createStaySubmission } from '../services/db';
 import { 
@@ -96,9 +106,38 @@ export const AddHotelPage: React.FC<AddHotelPageProps> = ({ onNavigate }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [copiedCode, setCopiedCode] = useState(false);
 
-  // Dependent location lists
-  const availableDistricts = divisionId ? getDistrictsByDivision(divisionId) : [];
-  const availableUpazilas = districtId ? getUpazilasByDistrict(districtId) : [];
+  // Dependent location lists (all 64 districts always available)
+  const availableDistricts = divisionId ? getDistrictsByDivision(divisionId) : DISTRICTS;
+  const availableUpazilas = districtId 
+    ? getUpazilasByDistrict(districtId) 
+    : divisionId 
+      ? getUpazilasByDivision(divisionId) 
+      : UPAZILAS.filter(u => POPULAR_TRAVEL_UPAZILAS.includes(u.id));
+
+  const handleDistrictChange = (disId: string) => {
+    setDistrictId(disId);
+    setUpazilaId('');
+    if (disId) {
+      const d = findDistrictById(disId);
+      if (d?.parentId) {
+        setDivisionId(d.parentId);
+      }
+    }
+  };
+
+  const handleUpazilaChange = (upzId: string) => {
+    setUpazilaId(upzId);
+    if (upzId) {
+      const u = findUpazilaById(upzId);
+      if (u?.parentId) {
+        setDistrictId(u.parentId);
+        const d = findDistrictById(u.parentId);
+        if (d?.parentId) {
+          setDivisionId(d.parentId);
+        }
+      }
+    }
+  };
 
   const handleAddRoom = () => {
     setRooms([
@@ -435,44 +474,91 @@ export const AddHotelPage: React.FC<AddHotelPageProps> = ({ onNavigate }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                {language === 'bn' ? 'জেলা *' : 'District *'}
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700">
+                  {language === 'bn' ? 'জেলা *' : 'District *'}
+                </label>
+                <span className="text-[10px] text-blue-600 font-medium">
+                  {divisionId ? `${availableDistricts.length}টি জেলা` : (language === 'bn' ? '৬৪ জেলা' : 'All 64')}
+                </span>
+              </div>
               <select
                 required
-                disabled={!divisionId}
                 value={districtId}
-                onChange={(e) => {
-                  setDistrictId(e.target.value);
-                  setUpazilaId('');
-                }}
-                className="w-full text-xs sm:text-sm px-3.5 py-2.5 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50"
+                onChange={(e) => handleDistrictChange(e.target.value)}
+                className="w-full text-xs sm:text-sm px-3.5 py-2.5 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
               >
-                <option value="">{language === 'bn' ? '-- জেলা নির্বাচন করুন --' : '-- Select District --'}</option>
-                {availableDistricts.map(d => (
-                  <option key={d.id} value={d.id}>
-                    {language === 'bn' ? d.nameBn : d.nameEn}
-                  </option>
-                ))}
+                <option value="">
+                  {divisionId 
+                    ? (language === 'bn' ? '-- জেলা নির্বাচন করুন --' : '-- Select District --')
+                    : (language === 'bn' ? '-- জেলা নির্বাচন করুন (৬৪ জেলা) --' : '-- Select District (All 64) --')}
+                </option>
+                {!divisionId ? (
+                  DIVISIONS.map(div => {
+                    const divDistricts = DISTRICTS.filter(d => d.parentId === div.id);
+                    return (
+                      <optgroup 
+                        key={div.id} 
+                        label={`${language === 'bn' ? div.nameBn : div.nameEn} ${language === 'bn' ? 'বিভাগ' : 'Division'}`}
+                      >
+                        {divDistricts.map(d => (
+                          <option key={d.id} value={d.id}>
+                            {language === 'bn' ? d.nameBn : d.nameEn}
+                          </option>
+                        ))}
+                      </optgroup>
+                    );
+                  })
+                ) : (
+                  availableDistricts.map(d => (
+                    <option key={d.id} value={d.id}>
+                      {language === 'bn' ? d.nameBn : d.nameEn}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                {language === 'bn' ? 'উপজেলা *' : 'Upazila *'}
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700">
+                  {language === 'bn' ? 'উপজেলা *' : 'Upazila *'}
+                </label>
+                <span className="text-[10px] text-blue-600 font-medium">
+                  {districtId ? `${availableUpazilas.length}টি` : (language === 'bn' ? 'সকল' : 'All')}
+                </span>
+              </div>
               <select
-                disabled={!districtId || availableUpazilas.length === 0}
+                required
                 value={upazilaId}
-                onChange={(e) => setUpazilaId(e.target.value)}
-                className="w-full text-xs sm:text-sm px-3.5 py-2.5 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50"
+                onChange={(e) => handleUpazilaChange(e.target.value)}
+                className="w-full text-xs sm:text-sm px-3.5 py-2.5 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
               >
                 <option value="">{language === 'bn' ? '-- উপজেলা নির্বাচন করুন --' : '-- Select Upazila --'}</option>
-                {availableUpazilas.map(u => (
-                  <option key={u.id} value={u.id}>
-                    {language === 'bn' ? u.nameBn : u.nameEn}
-                  </option>
-                ))}
+                {!districtId ? (
+                  <>
+                    <optgroup label={language === 'bn' ? 'জনপ্রিয় পর্যটন এলাকা' : 'Top Tourist Hubs'}>
+                      {UPAZILAS.filter(u => POPULAR_TRAVEL_UPAZILAS.includes(u.id)).map(u => (
+                        <option key={u.id} value={u.id}>
+                          ⭐ {language === 'bn' ? u.nameBn : u.nameEn}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label={language === 'bn' ? 'সকল উপজেলা' : 'All Upazilas'}>
+                      {UPAZILAS.slice(0, 80).map(u => (
+                        <option key={u.id} value={u.id}>
+                          {language === 'bn' ? u.nameBn : u.nameEn}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </>
+                ) : (
+                  availableUpazilas.map(u => (
+                    <option key={u.id} value={u.id}>
+                      {language === 'bn' ? u.nameBn : u.nameEn}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
           </div>

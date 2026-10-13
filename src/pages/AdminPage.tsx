@@ -47,7 +47,7 @@ interface AdminPageProps {
 
 export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => {
   const { language, t, formatDate, formatPrice } = useLanguage();
-  const { user, isAdmin, login, logout, changePassword } = useAuth();
+  const { user, isAdmin, isLoading, login, logout, changePassword } = useAuth();
 
   // Login form state
   const [emailInput, setEmailInput] = useState('mdrobiulhossain125@gmail.com');
@@ -216,7 +216,62 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onOpenSupabaseModal }) => 
     }
   };
 
-  // IF NOT AUTHENTICATED -> SHOW STRICT RESTRICTED ADMIN LOGIN
+  // 1. LOADING AUTH SESSION
+  if (isLoading) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-28 text-center space-y-4">
+        <div className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="text-xs text-slate-500 font-medium">
+          {language === 'bn' ? 'অ্যাডমিন সেশন ও পারমিশন যাচাই করা হচ্ছে...' : 'Verifying administrator credentials and permissions...'}
+        </p>
+      </div>
+    );
+  }
+
+  // 2. RBAC ACCESS DENIED (Authenticated but not SUPERADMIN or OWNER)
+  if (user && !isAdmin) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-16">
+        <div className="bg-white p-8 rounded-2xl border border-red-200 shadow-xl space-y-6 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto border border-red-100 shadow-xs">
+            <AlertTriangle className="w-7 h-7" />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-xl font-bold text-slate-900">
+              {language === 'bn' ? 'অনুমোদনহীন অ্যাক্সেস (Access Denied)' : 'Access Denied: Admin Privileges Required'}
+            </h1>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              {language === 'bn'
+                ? 'আপনার অ্যাকাউন্টটি সাধারণ ইউজার হিসেবে সাইন-ইন করা আছে। শুধুমাত্র SUPERADMIN বা OWNER রোল থাকা প্রোফাইলই এই কনসোলে প্রবেশ করতে পারবে।'
+                : 'Your logged-in account does not possess the SUPERADMIN or OWNER security role required to view or moderate this console.'}
+            </p>
+          </div>
+
+          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-left text-xs font-mono space-y-1 text-slate-600">
+            <div><span className="text-slate-400">Account:</span> {user.email}</div>
+            <div><span className="text-slate-400">Role:</span> <span className="uppercase text-red-600 font-bold">{user.role}</span></div>
+          </div>
+
+          <div className="pt-2 flex justify-center gap-3">
+            <button
+              onClick={logout}
+              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+            >
+              {language === 'bn' ? 'সাইন আউট করুন' : 'Sign Out'}
+            </button>
+            <button
+              onClick={() => { window.location.hash = 'home'; }}
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-colors shadow-xs"
+            >
+              {language === 'bn' ? 'মূল সাইটে ফিরে যান' : 'Back to Home'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 3. IF NOT AUTHENTICATED -> SHOW STRICT RESTRICTED ADMIN LOGIN
   if (!isAdmin) {
     return (
       <div className="max-w-md mx-auto px-4 py-16">

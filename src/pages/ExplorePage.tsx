@@ -2,7 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Hotel, AccommodationType, RoomType, BathroomType } from '../types';
 import { getPublishedHotels } from '../services/db';
-import { DIVISIONS, getDistrictsByDivision, getUpazilasByDistrict, findLocationById } from '../data/locations';
+import { 
+  DIVISIONS, 
+  DISTRICTS, 
+  UPAZILAS, 
+  getDistrictsByDivision, 
+  getUpazilasByDistrict, 
+  getUpazilasByDivision,
+  findLocationById, 
+  findDistrictById, 
+  findUpazilaById,
+  POPULAR_TRAVEL_UPAZILAS 
+} from '../data/locations';
 import { ALL_FACILITIES } from '../data/facilities';
 import { HotelCard } from '../components/HotelCard';
 import { 
@@ -49,9 +60,38 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState<boolean>(false);
 
-  // Dependent location lists
-  const districts = divisionId !== 'all' ? getDistrictsByDivision(divisionId) : [];
-  const upazilas = districtId !== 'all' ? getUpazilasByDistrict(districtId) : [];
+  // Dependent location lists (always full access to 64 districts)
+  const districts = divisionId !== 'all' ? getDistrictsByDivision(divisionId) : DISTRICTS;
+  const upazilas = districtId !== 'all' 
+    ? getUpazilasByDistrict(districtId) 
+    : divisionId !== 'all'
+      ? getUpazilasByDivision(divisionId)
+      : UPAZILAS.filter(u => POPULAR_TRAVEL_UPAZILAS.includes(u.id));
+
+  const handleDistrictChange = (disId: string) => {
+    setDistrictId(disId);
+    setUpazilaId('all');
+    if (disId !== 'all') {
+      const d = findDistrictById(disId);
+      if (d?.parentId) {
+        setDivisionId(d.parentId);
+      }
+    }
+  };
+
+  const handleUpazilaChange = (upzId: string) => {
+    setUpazilaId(upzId);
+    if (upzId !== 'all') {
+      const u = findUpazilaById(upzId);
+      if (u?.parentId) {
+        setDistrictId(u.parentId);
+        const d = findDistrictById(u.parentId);
+        if (d?.parentId) {
+          setDivisionId(d.parentId);
+        }
+      }
+    }
+  };
 
   const fetchHotels = async () => {
     setIsLoading(true);
@@ -188,38 +228,98 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
           ))}
         </select>
 
-        {/* District */}
-        <select
-          value={districtId}
-          disabled={divisionId === 'all'}
-          onChange={(e) => {
-            setDistrictId(e.target.value);
-            setUpazilaId('all');
-          }}
-          className="w-full text-xs px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600 disabled:opacity-50"
-        >
-          <option value="all">{t('allDistricts')}</option>
-          {districts.map(d => (
-            <option key={d.id} value={d.id}>
-              {language === 'bn' ? d.nameBn : d.nameEn}
+        {/* District (All 64 districts selectable) */}
+        <div>
+          <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+            <span>{language === 'bn' ? 'জেলা' : 'District'}</span>
+            <span className="text-blue-600 font-medium">
+              {divisionId === 'all' 
+                ? (language === 'bn' ? '৬৪ জেলা' : 'All 64') 
+                : (language === 'bn' ? `${districts.length}টি জেলা` : `${districts.length} districts`)}
+            </span>
+          </div>
+          <select
+            value={districtId}
+            onChange={(e) => handleDistrictChange(e.target.value)}
+            className="w-full text-xs px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600"
+          >
+            <option value="all">
+              {divisionId === 'all' 
+                ? (language === 'bn' ? 'সকল জেলা (৬৪টি জেলা)' : 'All Districts (64)') 
+                : t('allDistricts')}
             </option>
-          ))}
-        </select>
+            {divisionId === 'all' ? (
+              DIVISIONS.map(div => {
+                const divDistricts = DISTRICTS.filter(d => d.parentId === div.id);
+                return (
+                  <optgroup 
+                    key={div.id} 
+                    label={`${language === 'bn' ? div.nameBn : div.nameEn} ${language === 'bn' ? 'বিভাগ' : 'Division'}`}
+                  >
+                    {divDistricts.map(d => (
+                      <option key={d.id} value={d.id}>
+                        {language === 'bn' ? d.nameBn : d.nameEn}
+                      </option>
+                    ))}
+                  </optgroup>
+                );
+              })
+            ) : (
+              districts.map(d => (
+                <option key={d.id} value={d.id}>
+                  {language === 'bn' ? d.nameBn : d.nameEn}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
 
         {/* Upazila */}
-        <select
-          value={upazilaId}
-          disabled={districtId === 'all' || upazilas.length === 0}
-          onChange={(e) => setUpazilaId(e.target.value)}
-          className="w-full text-xs px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600 disabled:opacity-50"
-        >
-          <option value="all">{t('allUpazilas')}</option>
-          {upazilas.map(u => (
-            <option key={u.id} value={u.id}>
-              {language === 'bn' ? u.nameBn : u.nameEn}
+        <div>
+          <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+            <span>{language === 'bn' ? 'উপজেলা' : 'Upazila'}</span>
+            <span className="text-blue-600 font-medium">
+              {districtId !== 'all' 
+                ? `${upazilas.length}টি` 
+                : (language === 'bn' ? 'সকল' : 'All')}
+            </span>
+          </div>
+          <select
+            value={upazilaId}
+            onChange={(e) => handleUpazilaChange(e.target.value)}
+            className="w-full text-xs px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600"
+          >
+            <option value="all">
+              {districtId === 'all' 
+                ? (language === 'bn' ? 'সকল উপজেলা / পর্যটন এলাকা' : 'All Upazilas / Spots') 
+                : t('allUpazilas')}
             </option>
-          ))}
-        </select>
+            {districtId === 'all' ? (
+              <>
+                <optgroup label={language === 'bn' ? 'শীর্ষ পর্যটন গন্তব্য' : 'Top Travel Destinations'}>
+                  {UPAZILAS.filter(u => POPULAR_TRAVEL_UPAZILAS.includes(u.id)).map(u => (
+                    <option key={u.id} value={u.id}>
+                      ⭐ {language === 'bn' ? u.nameBn : u.nameEn}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label={language === 'bn' ? 'অন্যান্য উপজেলা' : 'Other Upazilas'}>
+                  {UPAZILAS.slice(0, 60).map(u => (
+                    <option key={u.id} value={u.id}>
+                      {language === 'bn' ? u.nameBn : u.nameEn}
+                    </option>
+                  ))}
+                </optgroup>
+              </>
+            ) : (
+              upazilas.map(u => (
+                <option key={u.id} value={u.id}>
+                  {language === 'bn' ? u.nameBn : u.nameEn}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
       </div>
 
       {/* 2. Nightly Budget in BDT */}

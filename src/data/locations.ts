@@ -93,75 +93,9 @@ export const DISTRICTS: LocationItem[] = [
   { id: 'dis-sherpur', parentId: 'div-mymensingh', nameEn: 'Sherpur', nameBn: 'শেরপুর', slug: 'sherpur', level: 'district', sourceCode: '89', isActive: true },
 ];
 
-export const UPAZILAS: LocationItem[] = [
-  // Cox's Bazar
-  { id: 'upz-coxsbazar-sadar', parentId: 'dis-coxsbazar', nameEn: "Cox's Bazar Sadar", nameBn: 'কক্সবাজার সদর', slug: 'coxsbazar-sadar', level: 'upazila', sourceCode: '2201', isActive: true },
-  { id: 'upz-teknaf', parentId: 'dis-coxsbazar', nameEn: 'Teknaf', nameBn: 'টেকনাফ', slug: 'teknaf', level: 'upazila', sourceCode: '2202', isActive: true },
-  { id: 'upz-ramu', parentId: 'dis-coxsbazar', nameEn: 'Ramu', nameBn: 'রামু', slug: 'ramu', level: 'upazila', sourceCode: '2203', isActive: true },
-  { id: 'upz-chakaria', parentId: 'dis-coxsbazar', nameEn: 'Chakaria', nameBn: 'চকোরিয়া', slug: 'chakaria', level: 'upazila', sourceCode: '2204', isActive: true },
-  { id: 'upz-saintmartin', parentId: 'dis-coxsbazar', nameEn: "St. Martin's Island", nameBn: 'সেন্টমার্টিন দ্বীপ', slug: 'saint-martin', level: 'upazila', sourceCode: '2205', isActive: true },
+import allUpazilasJson from './allUpazilas.json';
 
-  // Rangamati / Sajek
-  { id: 'upz-baghaichhari', parentId: 'dis-rangamati', nameEn: 'Baghaichhari (Sajek)', nameBn: 'বাঘাইছড়ি (সাজেক)', slug: 'baghaichhari-sajek', level: 'upazila', sourceCode: '8401', isActive: true },
-  { id: 'upz-rangamati-sadar', parentId: 'dis-rangamati', nameEn: 'Rangamati Sadar', nameBn: 'রাঙ্গামাটি সদর', slug: 'rangamati-sadar', level: 'upazila', sourceCode: '8402', isActive: true },
-  { id: 'upz-kaptai', parentId: 'dis-rangamati', nameEn: 'Kaptai', nameBn: 'কাপ্তাই', slug: 'kaptai', level: 'upazila', sourceCode: '8403', isActive: true },
-
-  // Moulvibazar / Sreemangal
-  { id: 'upz-sreemangal', parentId: 'dis-moulvibazar', nameEn: 'Sreemangal', nameBn: 'শ্রীমঙ্গল', slug: 'sreemangal', level: 'upazila', sourceCode: '5801', isActive: true },
-  { id: 'upz-kamalganj', parentId: 'dis-moulvibazar', nameEn: 'Kamalganj', nameBn: 'কমলগঞ্জ', slug: 'kamalganj', level: 'upazila', sourceCode: '5802', isActive: true },
-  { id: 'upz-moulvibazar-sadar', parentId: 'dis-moulvibazar', nameEn: 'Moulvibazar Sadar', nameBn: 'মৌলভীবাজার সদর', slug: 'moulvibazar-sadar', level: 'upazila', sourceCode: '5803', isActive: true },
-
-  // Bandarban
-  { id: 'upz-bandarban-sadar', parentId: 'dis-bandarban', nameEn: 'Bandarban Sadar', nameBn: 'বান্দরবান সদর', slug: 'bandarban-sadar', level: 'upazila', sourceCode: '0301', isActive: true },
-  { id: 'upz-ruma', parentId: 'dis-bandarban', nameEn: 'Ruma (Boga Lake)', nameBn: 'রুমা (বগা লেক)', slug: 'ruma', level: 'upazila', sourceCode: '0302', isActive: true },
-  { id: 'upz-thanchi', parentId: 'dis-bandarban', nameEn: 'Thanchi', nameBn: 'থানচি', slug: 'thanchi', level: 'upazila', sourceCode: '0303', isActive: true },
-  { id: 'upz-rowangchhari', parentId: 'dis-bandarban', nameEn: 'Rowangchhari', nameBn: 'রোয়াংছড়ি', slug: 'rowangchhari', level: 'upazila', sourceCode: '0304', isActive: true },
-
-  // Sylhet
-  { id: 'upz-sylhet-sadar', parentId: 'dis-sylhet', nameEn: 'Sylhet Sadar', nameBn: 'সিলেট সদর', slug: 'sylhet-sadar', level: 'upazila', sourceCode: '9101', isActive: true },
-  { id: 'upz-gowainghat', parentId: 'dis-sylhet', nameEn: 'Gowainghat (Jaflong)', nameBn: 'গোয়াইনঘাট (জাফলং)', slug: 'gowainghat-jaflong', level: 'upazila', sourceCode: '9102', isActive: true },
-  { id: 'upz-companiganj', parentId: 'dis-sylhet', nameEn: 'Companiganj (Bichnakandi)', nameBn: 'কোম্পানীগঞ্জ (বিছনাকান্দি)', slug: 'companiganj-bichnakandi', level: 'upazila', sourceCode: '9103', isActive: true },
-
-  // Sunamganj
-  { id: 'upz-tahirpur', parentId: 'dis-sunamganj', nameEn: 'Tahirpur (Tanguar Haor)', nameBn: 'তাহিরপুর (টাঙ্গুয়ার হাওর)', slug: 'tahirpur-tanguar-haor', level: 'upazila', sourceCode: '9001', isActive: true },
-  { id: 'upz-sunamganj-sadar', parentId: 'dis-sunamganj', nameEn: 'Sunamganj Sadar', nameBn: 'সুনামগঞ্জ সদর', slug: 'sunamganj-sadar', level: 'upazila', sourceCode: '9002', isActive: true },
-
-  // Patuakhali / Kuakata
-  { id: 'upz-kalapara', parentId: 'dis-patuakhali', nameEn: 'Kalapara (Kuakata Beach)', nameBn: 'কলাপাড়া (কুয়াকাটা)', slug: 'kalapara-kuakata', level: 'upazila', sourceCode: '7801', isActive: true },
-  { id: 'upz-patuakhali-sadar', parentId: 'dis-patuakhali', nameEn: 'Patuakhali Sadar', nameBn: 'পটুয়াখালী সদর', slug: 'patuakhali-sadar', level: 'upazila', sourceCode: '7802', isActive: true },
-
-  // Dhaka
-  { id: 'upz-mirpur', parentId: 'dis-dhaka', nameEn: 'Mirpur', nameBn: 'মিরপুর', slug: 'mirpur', level: 'upazila', sourceCode: '2601', isActive: true },
-  { id: 'upz-sadarghat', parentId: 'dis-dhaka', nameEn: 'Kotwali (Sadarghat)', nameBn: 'কোতোয়ালি (সদরঘাট)', slug: 'kotwali-sadarghat', level: 'upazila', sourceCode: '2602', isActive: true },
-  { id: 'upz-uttara', parentId: 'dis-dhaka', nameEn: 'Uttara', nameBn: 'উত্তরা', slug: 'uttara', level: 'upazila', sourceCode: '2603', isActive: true },
-  { id: 'upz-dhanmondi', parentId: 'dis-dhaka', nameEn: 'Dhanmondi', nameBn: 'ধানমন্ডি', slug: 'dhanmondi', level: 'upazila', sourceCode: '2604', isActive: true },
-  { id: 'upz-savar', parentId: 'dis-dhaka', nameEn: 'Savar', nameBn: 'সাভার', slug: 'savar', level: 'upazila', sourceCode: '2605', isActive: true },
-
-  // Chattogram
-  { id: 'upz-ctg-sadar', parentId: 'dis-chattogram', nameEn: 'Chattogram Sadar (Agrabad)', nameBn: 'চট্টগ্রাম সদর (আগ্রাবাদ)', slug: 'chattogram-sadar', level: 'upazila', sourceCode: '1501', isActive: true },
-  { id: 'upz-sitakunda', parentId: 'dis-chattogram', nameEn: 'Sitakunda', nameBn: 'সীতাকুণ্ড', slug: 'sitakunda', level: 'upazila', sourceCode: '1502', isActive: true },
-  { id: 'upz-mirsharai', parentId: 'dis-chattogram', nameEn: 'Mirsharai', nameBn: 'মীরসরাই', slug: 'mirsharai', level: 'upazila', sourceCode: '1503', isActive: true },
-
-  // Panchagarh
-  { id: 'upz-tetulia', parentId: 'dis-panchagarh', nameEn: 'Tetulia (Kanchenjunga View)', nameBn: 'তেঁতুলিয়া (কাঞ্চনজঙ্ঘা ভিউ)', slug: 'tetulia', level: 'upazila', sourceCode: '7701', isActive: true },
-  { id: 'upz-panchagarh-sadar', parentId: 'dis-panchagarh', nameEn: 'Panchagarh Sadar', nameBn: 'পঞ্চগড় সদর', slug: 'panchagarh-sadar', level: 'upazila', sourceCode: '7702', isActive: true },
-
-  // Bagerhat / Sundarbans
-  { id: 'upz-mongla', parentId: 'dis-bagerhat', nameEn: 'Mongla (Sundarbans Gateway)', nameBn: 'মোংলা (সুন্দরবন)', slug: 'mongla-sundarbans', level: 'upazila', sourceCode: '0101', isActive: true },
-  { id: 'upz-bagerhat-sadar', parentId: 'dis-bagerhat', nameEn: 'Bagerhat Sadar', nameBn: 'বাগেরহাট সদর', slug: 'bagerhat-sadar', level: 'upazila', sourceCode: '0102', isActive: true },
-
-  // Rajshahi
-  { id: 'upz-rajshahi-sadar', parentId: 'dis-rajshahi', nameEn: 'Boalia (Rajshahi Sadar)', nameBn: 'বোয়ালিয়া (রাজশাহী সদর)', slug: 'rajshahi-sadar', level: 'upazila', sourceCode: '8101', isActive: true },
-  { id: 'upz-paba', parentId: 'dis-rajshahi', nameEn: 'Paba', nameBn: 'পবা', slug: 'paba', level: 'upazila', sourceCode: '8102', isActive: true },
-
-  // Bogura
-  { id: 'upz-bogura-sadar', parentId: 'dis-bogura', nameEn: 'Bogura Sadar', nameBn: 'বগুড়া সদর', slug: 'bogura-sadar', level: 'upazila', sourceCode: '1001', isActive: true },
-  { id: 'upz-shibganj-bogura', parentId: 'dis-bogura', nameEn: 'Shibganj (Mahasthangarh)', nameBn: 'শিবগঞ্জ (মহাস্থানগড়)', slug: 'shibganj-mahasthangarh', level: 'upazila', sourceCode: '1002', isActive: true },
-
-  // Barishal
-  { id: 'upz-barishal-sadar', parentId: 'dis-barishal', nameEn: 'Kotwali (Barishal Sadar)', nameBn: 'কোতোয়ালি (বরিশাল সদর)', slug: 'barishal-sadar', level: 'upazila', sourceCode: '0601', isActive: true },
-  { id: 'upz-banaripara', parentId: 'dis-barishal', nameEn: 'Banaripara (Floating Guava Market)', nameBn: 'বানারীপাড়া (ভাসমান পেয়ারা বাজার)', slug: 'banaripara', level: 'upazila', sourceCode: '0602', isActive: true },
-];
+export const UPAZILAS: LocationItem[] = allUpazilasJson as LocationItem[];
 
 export const ALL_LOCATIONS: LocationItem[] = [
   ...DIVISIONS,
@@ -173,16 +107,48 @@ export function getDivisions(): LocationItem[] {
   return DIVISIONS.filter(l => l.isActive);
 }
 
-export function getDistrictsByDivision(divisionId: string): LocationItem[] {
+export function getAllDistricts(): LocationItem[] {
+  return DISTRICTS.filter(d => d.isActive);
+}
+
+export function getAllUpazilas(): LocationItem[] {
+  return UPAZILAS.filter(u => u.isActive);
+}
+
+export function getDistrictsByDivision(divisionId?: string): LocationItem[] {
+  if (!divisionId || divisionId === 'all') {
+    return DISTRICTS.filter(d => d.isActive);
+  }
   return DISTRICTS.filter(d => d.parentId === divisionId && d.isActive);
 }
 
-export function getUpazilasByDistrict(districtId: string): LocationItem[] {
+export function getUpazilasByDistrict(districtId?: string): LocationItem[] {
+  if (!districtId || districtId === 'all') {
+    return UPAZILAS.filter(u => u.isActive);
+  }
   return UPAZILAS.filter(u => u.parentId === districtId && u.isActive);
+}
+
+export function getUpazilasByDivision(divisionId: string): LocationItem[] {
+  if (!divisionId || divisionId === 'all') {
+    return UPAZILAS.filter(u => u.isActive);
+  }
+  const districtIds = new Set(
+    DISTRICTS.filter(d => d.parentId === divisionId).map(d => d.id)
+  );
+  return UPAZILAS.filter(u => districtIds.has(u.parentId || '') && u.isActive);
 }
 
 export function findLocationById(id: string): LocationItem | undefined {
   return ALL_LOCATIONS.find(l => l.id === id);
+}
+
+export function findDistrictById(id: string): LocationItem | undefined {
+  return DISTRICTS.find(d => d.id === id);
+}
+
+export function findUpazilaById(id: string): LocationItem | undefined {
+  return UPAZILAS.find(u => u.id === id);
 }
 
 export function getLocationHierarchy(locationId: string): {
@@ -221,3 +187,15 @@ export function searchLocations(query: string): LocationItem[] {
     )
   );
 }
+
+export const POPULAR_TRAVEL_UPAZILAS = [
+  'upz-baghaichhari',      // বাঘাইছড়ি (সাজেক)
+  'upz-coxsbazar-sadar',   // কক্সবাজার সদর
+  'upz-sreemangal',        // শ্রীমঙ্গল
+  'upz-kalapara',          // কলাপাড়া (কুয়াকাটা)
+  'upz-teknaf',            // টেকনাফ
+  'upz-bandarban-sadar',   // বান্দরবান সদর
+  'upz-gowainghat',        // গোয়াইনঘাট (জাফলং)
+  'upz-mirpur',            // মিরপুর (ঢাকা)
+];
+

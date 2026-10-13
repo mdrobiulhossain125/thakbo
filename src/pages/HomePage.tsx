@@ -91,33 +91,41 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectHotel })
     <div className="space-y-16 sm:space-y-24 pb-16">
       
       {/* 1. HERO SECTION */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-28 bg-slate-900 overflow-hidden">
+      <section className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 bg-slate-950 overflow-hidden">
         
-        {/* Background Image with High-Fidelity Measured Contrast Scrim */}
+        {/* Creative Background Image with Atmospheric Cinematic Scrim */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/src/assets/images/hero_bangladesh_travel_1791896535987.jpg"
-            alt="Bangladesh Travel Landscape"
-            className="w-full h-full object-cover opacity-35"
+            src="/src/assets/images/bangladesh_creative_hero_1791902323480.jpg"
+            alt="Bangladesh Creative Travel Landscape - Rolling tea terraces, misty rivers, and majestic mountains"
+            className="w-full h-full object-cover object-center scale-105 transform motion-safe:animate-[pulse_10s_ease-in-out_infinite]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-slate-900/60" />
+          {/* Multi-layered cinematic gradient: warm golden top-left accent + deep navy contrast base */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-900/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/60" />
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 -right-32 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
         </div>
 
         {/* Content Container */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           
-          {/* Subtitle / Tagline */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold mb-6">
-            <Compass className="w-3.5 h-3.5" />
+          {/* Subtitle / Tagline Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/20 text-blue-200 text-xs sm:text-sm font-semibold mb-6 shadow-lg shadow-black/20">
+            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{t('appTagline')}</span>
+            <span className="hidden sm:inline-block text-white/40">|</span>
+            <span className="hidden sm:inline-block text-emerald-300 font-normal">
+              {language === 'bn' ? '৬৪ জেলা ও ৫০৫+ উপজেলা' : '64 Districts & 505+ Upazilas'}
+            </span>
           </div>
 
           {/* Bengali & English Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight max-w-3xl mx-auto leading-tight mb-4 text-balance">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight max-w-4xl mx-auto leading-tight mb-4 text-balance drop-shadow-md">
             {t('heroHeading')}
           </h1>
 
-          <p className="text-sm sm:text-base lg:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed mb-10 text-balance">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-200/90 max-w-2xl mx-auto leading-relaxed mb-10 text-balance font-medium drop-shadow-sm">
             {t('heroSubtitle')}
           </p>
 
@@ -125,15 +133,26 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectHotel })
           <SearchBar onSearch={handleHeroSearch} variant="hero" />
 
           {/* Quick Filter Prompts */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400">
-            <span className="text-slate-500">{language === 'bn' ? 'দ্রুত খুঁজুন:' : 'Popular:'}</span>
-            {popularDestinations.map((dest) => (
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300">
+            <span className="text-slate-400 font-semibold flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-blue-400" />
+              <span>{language === 'bn' ? 'জনপ্রিয় গন্তব্য:' : 'Quick Hubs:'}</span>
+            </span>
+            {[
+              { id: 'upz-coxsbazar-sadar', bn: 'কক্সবাজার', en: "Cox's Bazar" },
+              { id: 'upz-baghaichhari', bn: 'সাজেক ভ্যালি', en: 'Sajek Valley' },
+              { id: 'upz-sreemangal', bn: 'শ্রীমঙ্গল', en: 'Sreemangal' },
+              { id: 'upz-bandarban-sadar', bn: 'বান্দরবান', en: 'Bandarban' },
+              { id: 'upz-kalapara', bn: 'কুয়াকাটা', en: 'Kuakata' },
+              { id: 'upz-gowainghat', bn: 'জাফলং / সিলেট', en: 'Jaflong / Sylhet' },
+              { id: 'upz-teknaf', bn: 'সেন্টমার্টিন / টেকনাফ', en: 'St. Martin / Teknaf' }
+            ].map((hub) => (
               <button
-                key={dest.locationId}
-                onClick={() => onNavigate('hotels', { upazilaId: dest.locationId })}
-                className="px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 text-slate-200 transition-colors"
+                key={hub.id}
+                onClick={() => onNavigate('hotels', { upazilaId: hub.id })}
+                className="px-3 py-1.5 rounded-lg bg-slate-900/60 hover:bg-blue-600/80 backdrop-blur-sm border border-white/10 hover:border-blue-400 text-slate-200 hover:text-white transition-all shadow-xs"
               >
-                {language === 'bn' ? dest.nameBn : dest.nameEn}
+                {language === 'bn' ? hub.bn : hub.en}
               </button>
             ))}
           </div>

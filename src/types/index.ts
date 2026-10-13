@@ -212,7 +212,7 @@ export interface AdminUser {
   id: string;
   email: string;
   fullName: string;
-  role: 'superadmin' | 'admin' | 'moderator';
+  role: 'superadmin' | 'owner' | 'admin' | 'moderator' | 'user';
 }
 
 export interface HotelFilterOptions {
