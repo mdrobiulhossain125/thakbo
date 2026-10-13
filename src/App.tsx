@@ -31,8 +31,21 @@ function MainApp() {
       }
     };
 
+    // Keyboard shortcut for owner: Alt+A or Ctrl+Shift+A
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.altKey && e.key.toLowerCase() === 'a') || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a')) {
+        e.preventDefault();
+        setCurrentView('admin');
+        window.location.hash = 'admin';
+      }
+    };
+
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleNavigate = (view: string, params: any = {}) => {

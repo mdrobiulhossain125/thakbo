@@ -101,19 +101,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenS
               <span>{t('navAddStay')}</span>
             </button>
 
-            {/* Admin Portal Button */}
-            <button
-              onClick={() => handleNavClick('admin')}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg transition-colors border ${
-                currentView === 'admin' || isAdmin
-                  ? 'bg-blue-50 text-blue-700 border-blue-200 font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 border-transparent hover:bg-slate-100'
-              }`}
-              title="Admin Portal"
-            >
-              <Shield className="w-3.5 h-3.5 text-slate-500" />
-              <span className="hidden sm:inline">{isAdmin ? (language === 'bn' ? 'ড্যাশবোর্ড' : 'Admin') : (language === 'bn' ? 'অ্যাডমিন' : 'Admin')}</span>
-            </button>
+            {/* Admin Portal Button - Only visible when already logged in as administrator */}
+            {isAdmin && (
+              <button
+                onClick={() => handleNavClick('admin')}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 border border-blue-200 transition-colors"
+                title="Admin Dashboard"
+              >
+                <Shield className="w-3.5 h-3.5 text-blue-600" />
+                <span className="hidden sm:inline">{language === 'bn' ? 'ড্যাশবোর্ড' : 'Dashboard'}</span>
+              </button>
+            )}
 
             {/* Mobile menu toggle button */}
             <button
@@ -152,13 +150,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenS
               <PlusCircle className="w-4 h-4" />
               <span>{t('navAddStay')}</span>
             </button>
-            <button
-              onClick={() => handleNavClick('admin')}
-              className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50"
-            >
-              <Shield className="w-4 h-4 text-slate-500" />
-              <span>{language === 'bn' ? 'অ্যাডমিন' : 'Admin'}</span>
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => handleNavClick('admin')}
+                className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 rounded-lg"
+              >
+                <Shield className="w-4 h-4 text-blue-600" />
+                <span>{language === 'bn' ? 'ড্যাশবোর্ড' : 'Dashboard'}</span>
+              </button>
+            )}
           </div>
         </div>
       )}

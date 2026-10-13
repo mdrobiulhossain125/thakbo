@@ -128,21 +128,24 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenSupabaseModal 
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>
-            © 2026 {language === 'bn' ? 'থাকবো' : 'Thakbo'}. {t('allRightsReserved')}
-          </p>
+          <div className="flex items-center gap-2">
+            <span>© 2026 {language === 'bn' ? 'থাকবো' : 'Thakbo'}. {t('allRightsReserved')}</span>
+            <button 
+              onClick={() => onNavigate('admin')}
+              className="text-slate-600 hover:text-slate-400 transition-colors p-1"
+              title="Restricted Staff Entry"
+              aria-label="Staff Login"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+            </button>
+          </div>
 
           <div className="flex items-center gap-4 text-slate-400">
             <span>{language === 'bn' ? 'নো-হিডেন চার্জ' : 'No Hidden Fees'}</span>
             <span>·</span>
             <span>{language === 'bn' ? 'কমিউনিটি চালিত' : 'Community Powered'}</span>
             <span>·</span>
-            <button 
-              onClick={() => onNavigate('admin')}
-              className="text-slate-400 hover:text-slate-200 transition-colors"
-            >
-              {language === 'bn' ? 'মডারেটর লগইন' : 'Moderator Portal'}
-            </button>
+            <span>{language === 'bn' ? 'যাচাইকৃত আবাসন' : 'Verified Directory'}</span>
           </div>
         </div>
 
